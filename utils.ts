@@ -81,3 +81,12 @@ export function printMatrix(matrix: number[], cols: number, maxCellLength = 2) {
 export function buildObject<T>(arr: (string | number)[][]): Record<string, T> {
   return Object.assign({}, ...arr.map(([key, val]) => ({ [key]: val })))
 }
+
+export type Range = [number, number]
+
+export function overlap(range1: Range, range2: Range, full = false) {
+  return (
+    (range1[0] <= range2[0] && range1[1] >= range2[full ? 1 : 0]) ||
+    (range2[0] <= range1[0] && range2[1] >= range1[full ? 1 : 0])
+  )
+}
