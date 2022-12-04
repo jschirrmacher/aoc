@@ -72,7 +72,10 @@ export function printMatrix(matrix: number[], cols: number, maxCellLength = 2) {
     chunks[ch] = ([] as number[]).concat(chunks[ch] || [], cell)
     return chunks
   }, [] as number[][])
-  console.log(chunks.map(row => row.map(cell => ("" + cell).padStart(maxCellLength)).join(" ")).join("\n") + "\n")
+  console.log(
+    chunks.map(row => row.map(cell => ("" + cell).padStart(maxCellLength)).join(" ")).join("\n") +
+      "\n"
+  )
 }
 
 export function buildObject<T>(arr: (string | number)[][]): Record<string, T> {
