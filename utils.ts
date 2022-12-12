@@ -50,8 +50,8 @@ export function* range(begin: number, end: number) {
   }
 }
 
-export function times(num: number, func: () => void) {
-  ;[...range(0, num - 1)].forEach(func)
+export function times<T>(num: number, func: (val: T, index: number) => T, init = undefined as T) {
+  return [...range(0, num - 1)].reduce(func, init)
 }
 
 export function createMatrix(rawData: string) {
