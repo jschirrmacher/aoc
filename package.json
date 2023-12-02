@@ -3,17 +3,18 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "ts-node-dev --respawn --transpile-only --clear index.ts"
+    "start": "node-dev --respawn --clear --loader ts-node/esm index.ts"
   },
   "author": "Joachim Schirrmacher <joachim.schirrmacher@gmail.com>",
   "license": "Apache-2.0",
+  "type": "module",
   "devDependencies": {
     "@types/node": "18.11.0",
     "eslint": "7.32.0",
+    "node-dev": "^8.0.0",
     "prettier": "2.7.1",
     "prettier-eslint": "^15.0.1",
     "ts-node": "10.9.1",
-    "ts-node-dev": "2.0.0",
     "typescript": "4.8.4"
   },
   "engines": {

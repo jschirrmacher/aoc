@@ -21,11 +21,18 @@ async function runModule(part: number, dir: string, inputFile: string, module: {
 }
 
 async function run(part: number) {
+  function getFileName(baseName: string) {
+    if (existsSync(resolve(dir, `${baseName}${part}.txt`))) {
+      return `${baseName}${part}.txt`
+    }
+    return `${baseName}.txt`
+  }
+  
   const fileName = resolve(dir, `part${part}.ts`)
   if (existsSync(fileName)) {
     const module = await import(fileName)
-    runModule(part, dir, "testdata.txt", module)
-    runModule(part, dir, "input.txt", module)
+    runModule(part, dir, getFileName("testdata"), module)
+    runModule(part, dir, getFileName("input"), module)
   } else {
     console.log(`Part ${part} is not defined for day ${day.getDate()}`)
   }
@@ -34,7 +41,7 @@ async function run(part: number) {
 const day = new Date(process.env.DAY || Date.now())
 let dir = ""
 if (day.getDate() < 26 && day.getMonth() === 11) {
-  dir = resolve(__dirname, "" + day.getFullYear(), "" + day.getDate())
+  dir = resolve(process.cwd(), "" + day.getFullYear(), "" + day.getDate())
   if (!existsSync(dir)) {
     mkdirSync(dir, { recursive: true })
     writeFileSync(join(dir, "input.txt"), "")
