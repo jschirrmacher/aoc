@@ -1,12 +1,11 @@
-const bag = {
+import { parseGame } from "./parseGame.js"
+import { Bag, Color, CubeSet } from "./types.js"
+
+export const bag: Bag = {
   red: 12,
   green: 13,
   blue: 14,
 }
-
-type Bag = typeof bag
-type Color = keyof Bag
-type CubeSet = [number, Color][][]
 
 export default function (rawData: string) {
   const games = rawData
@@ -16,19 +15,6 @@ export default function (rawData: string) {
     .filter(possible)
 
   return games.map(([game]) => game).reduce((sum, game) => sum + game, 0)
-}
-
-function parseGame(line: string) {
-  const { game, cubes } = line.match(/Game (?<game>\d+): (?<cubes>.*)/)!.groups!
-  return [
-    +game,
-    cubes.split(";").map(value =>
-      value
-        .split(",")
-        .map(v => v.trim().split(" "))
-        .map(([num, color]) => [+num, color as Color])
-    ),
-  ] as [number, CubeSet]
 }
 
 function possible([, cubeSet]: [number, CubeSet]) {
