@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "node-dev --respawn --clear --loader ts-node/esm index.ts"
+    "start": "tsx watch index.ts"
   },
   "author": "Joachim Schirrmacher <joachim.schirrmacher@gmail.com>",
   "license": "Apache-2.0",
@@ -14,11 +14,11 @@
     "node-dev": "^8.0.0",
     "prettier": "2.7.1",
     "prettier-eslint": "^15.0.1",
-    "ts-node": "10.9.1",
+    "tsx": "^4.6.2",
     "typescript": "4.8.4"
   },
   "engines": {
     "node": ">= 18.0.0",
-    "nvm": ">= 8.0.0"
+    "npm": ">= 8.0.0"
   }
 }
