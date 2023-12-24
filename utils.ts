@@ -14,6 +14,10 @@ export function sum(numbers: number[]) {
   return numbers.reduce((sum, num) => sum + num, 0)
 }
 
+export function mod(n: number, m: number) {
+  return ((n % m) + m) % m
+}
+
 export function unique<T>(list: T[]) {
   return [...new Set(list)]
 }
