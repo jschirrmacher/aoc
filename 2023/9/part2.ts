@@ -1,3 +1,5 @@
+import { solve } from "./solve"
+
 export default function (rawData: string) {
-  return 0
+  return solve(rawData, "prev")
 }
