@@ -1,35 +1,69 @@
-type PosAndDir = {
-  pos: number
+type Pos = {
+  index: number
   dir: number
+  symbol?: string
 }
 
 export function findPath(rawData: string) {
   const tiles = rawData.replace(/\n/g, "")
   const width = rawData.split("\n").at(0)?.length!
   const [U, D, L, R] = [-width, width, -1, 1]
-
-  function getStart() {
-    const pos = tiles.indexOf("S")
-    if (pos > width && ["7", "F", "|"].includes(tiles[pos + U])) return { pos, dir: U }
-    if (pos % width > 0 && ["L", "F", "-"].includes(tiles[pos + L])) return { pos, dir: L }
-    if (pos % width < width - 1 && ["J", "7", "-"].includes(tiles[pos + R])) return { pos, dir: R }
-    return { pos, dir: D }
+  const reverseDir = {
+    [-width]: "U",
+    [width]: "D",
+    [-1]: "L",
+    [1]: "R",
   }
 
-  function goNextStep({ pos, dir }: PosAndDir) {
-    if (dir !== D && pos > width && ["J", "L", "|"].includes(tiles[pos])) return U
-    if (dir !== R && pos % width > 0 && ["7", "J", "-"].includes(tiles[pos])) return L
-    if (dir !== L && pos % width < width - 1 && ["F", "L", "-"].includes(tiles[pos])) return R
+  function getStart(): Pos {
+    const index = tiles.indexOf("S")
+    if (index > width && ["7", "F", "|"].includes(tiles[index + U])) return { index, dir: U }
+    if (index % width > 0 && ["L", "F", "-"].includes(tiles[index + L])) return { index, dir: L }
+    if (index % width < width - 1 && ["J", "7", "-"].includes(tiles[index + R]))
+      return { index, dir: R }
+    return { index: index, dir: D }
+  }
+
+  function goNextStep({ index, dir }: Pos) {
+    if (dir !== D && index > width && ["J", "L", "|"].includes(tiles[index])) return U
+    if (dir !== R && index % width > 0 && ["7", "J", "-"].includes(tiles[index])) return L
+    if (dir !== L && index % width < width - 1 && ["F", "L", "-"].includes(tiles[index])) return R
     return D
   }
 
-  const posAndDir = getStart()
-  const startPos = posAndDir.pos
-  const path = [] as PosAndDir[]
+  const symbolMapping = {
+    LL: "-",
+    LU: "7",
+    LD: "J",
+    RR: "-",
+    RU: "L",
+    RD: "F",
+    UU: "|",
+    UL: "L",
+    UR: "J",
+    DD: "|",
+    DL: "F",
+    DR: "7",
+  } as Record<string, string>
+
+  function getSymbol(startDir: number, endDir: number) {
+    const key = `${reverseDir[startDir]}${reverseDir[endDir]}`
+    if (!symbolMapping[key]) {
+      throw new Error(`Unexpected combination ${key}`)
+    }
+    return symbolMapping[key]
+  }
+
+  let pos = getStart()
+  const start = pos
+  const path = [] as Pos[]
   do {
-    path.push(posAndDir)
-    posAndDir.pos = posAndDir.pos + posAndDir.dir
-    posAndDir.dir = goNextStep(posAndDir)
-  } while (posAndDir.pos !== startPos)
+    path.push(pos)
+    const index = pos.index + pos.dir
+    pos = { index, dir: goNextStep({ index, dir: pos.dir }) }
+    pos.symbol = tiles[pos.index]
+  } while (pos.index !== start.index)
+
+  path[0].symbol = getSymbol(start.dir, pos.dir)
   return path
 }
